@@ -142,6 +142,14 @@ class MyBLBLApplication : Application() {
             trace("initNetworkCore", startMs) { initNetworkCore() }
             dataRuntimeReady.set(true)
             AppLog.i(TAG, "STARTUP dataRuntimeInit end reason=$reason elapsed=${SystemClock.elapsedRealtime() - startMs}ms")
+            // 节目单：启动即后台下载/缓存（独立 client，不依赖网络会话就绪与首页 Fragment 创建时机）
+            appScope.launch {
+                runCatching {
+                    com.mytvb.feature.playlist.PlaylistRepository.ensureFresh(this@MyBLBLApplication)
+                }.onFailure {
+                    AppLog.w(TAG, "节目单启动下载异常: ${it.javaClass.simpleName}: ${it.message}")
+                }
+            }
         }
     }
 

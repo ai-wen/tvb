@@ -69,7 +69,8 @@ object PlaylistRepository {
                     AppLog.w(TAG, "节目单下载失败（${SOURCES.size} 个源均不可达），沿用缓存 ${playlistState.value.sumOf { it.vods.size }} 条")
                     return@withContext
                 }
-                val parsed = parse(body)
+                // runCatching 兜底：任何解析异常都不允许击穿下载协程
+                val parsed = runCatching { parse(body) }.getOrDefault(emptyList())
                 if (parsed.isEmpty()) {
                     AppLog.w(TAG, "节目单解析失败（无可显示条目），沿用缓存")
                     return@withContext
@@ -145,7 +146,9 @@ object PlaylistRepository {
         // 1) 标准结构 {data:[{tag,name,vods:[{name,url}]}]}
         runCatching {
             val type = object : TypeToken<com.mytvb.feature.marmot.domain.MarmotModels.DataWrapper<Live>>() {}.type
-            GsonHolder.DEFAULT.fromJson<List<Live>>(json, type)
+            GsonHolder.DEFAULT
+                .fromJson<com.mytvb.feature.marmot.domain.MarmotModels.DataWrapper<Live>>(json, type)
+                .data
         }.getOrNull()
             ?.takeIf { it.isNotEmpty() }
             ?.let { return it }
