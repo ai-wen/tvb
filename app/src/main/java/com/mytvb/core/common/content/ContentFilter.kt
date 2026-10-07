@@ -671,7 +671,8 @@ object ContentFilter {
         if (isVideoKeyBlocked(context, aid, bvid, title.orEmpty(), coverUrl)) {
             return true
         }
-        if (teenageMode != 0) return true
+        // teenage_mode 是 B 站"适合青少年"的正向标记，不作黑名单（定制版：教育纪录片普遍带此标记）
+        // if (teenageMode != 0) return true
         val safeAuthorName = authorName.orEmpty()
         if (safeAuthorName.isNotEmpty() && isUpNameBlocked(context, safeAuthorName)) {
             return true
@@ -712,7 +713,8 @@ object ContentFilter {
         ) {
             return true
         }
-        if (teenageMode != 0) return true
+        // teenage_mode 是 B 站"适合青少年"的正向标记，不作黑名单（定制版：教育纪录片普遍带此标记）
+        // if (teenageMode != 0) return true
         val safeAuthorName = authorName.orEmpty()
         if (safeAuthorName.isNotEmpty()) {
             val trimmed = safeAuthorName.trim()

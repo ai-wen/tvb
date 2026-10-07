@@ -605,11 +605,13 @@ class MyPlayerControlView @JvmOverloads constructor(
     }
 
     fun showHideActionButton(show: Boolean) {
-        setButtonVisibility(buttonMore, show)
+        // 定制版：隐藏"更多"按钮（点赞/投币/收藏菜单入口）
+        setButtonVisibility(buttonMore, false)
     }
 
     fun showHideRelatedButton(show: Boolean) {
-        setButtonVisibility(buttonRelated, show)
+        // 定制版：隐藏"相关推荐"按钮（推荐视频列表入口）
+        setButtonVisibility(buttonRelated, false)
     }
 
     fun isRelatedButtonVisible(): Boolean {

@@ -547,6 +547,9 @@ class VideoPlayerOverlayController(
     }
 
     fun showPlayerActionDialog() {
+        // 定制版：不弹点赞/投币/收藏操作菜单（保留方法便于日后恢复）
+        return
+        @Suppress("UNREACHABLE_CODE")
         val view = latestVideoInfoProvider()?.view
         val aid = view?.aid ?: 0L
         val bvid = view?.bvid.orEmpty()

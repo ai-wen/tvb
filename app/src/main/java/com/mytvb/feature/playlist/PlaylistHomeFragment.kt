@@ -7,7 +7,9 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -18,6 +20,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mytvb.R
 import com.mytvb.core.common.ext.toast
 import com.mytvb.core.navigation.VideoRouteNavigator
+import com.mytvb.core.ui.image.ImageLoader
+import com.mytvb.feature.marmot.domain.MarmotModels.Live
+import com.mytvb.feature.marmot.domain.MarmotModels.Vod
 import com.mytvb.model.video.VideoModel
 import com.mytvb.ui.fragment.main.MainTabFocusTarget
 import kotlinx.coroutines.Dispatchers
@@ -27,6 +32,7 @@ import kotlinx.coroutines.launch
  * 节目单首页：主界面默认内容页，只显示 tv.json 节目单内容。
  *
  * - 条目 URL 为 B 站视频/合集链接（BV 号）→ 原生播放器
+ * - 条目带 pic 字段 → 显示封面图（ImageLoader）
  * - 条目无 URL（暂无片源）→ 置灰不可点
  * - 其它类型链接 → 提示暂不支持
  */
@@ -79,7 +85,7 @@ class PlaylistHomeFragment : Fragment(), MainTabFocusTarget {
         }
     }
 
-    private fun onEntryClick(vod: com.mytvb.feature.marmot.domain.MarmotModels.Vod) {
+    private fun onEntryClick(vod: Vod) {
         val bvid = BILI_VIDEO_REGEX.find(vod.url)?.groupValues?.getOrNull(1)
         when {
             !bvid.isNullOrBlank() -> VideoRouteNavigator.openVideo(
@@ -100,19 +106,19 @@ class PlaylistHomeFragment : Fragment(), MainTabFocusTarget {
     }
 }
 
-/** 节目单列表适配器：分组标题 + 节目条目（item 视图程序化构建，减少资源文件）。 */
+/** 节目单列表适配器：分组标题 + 图文节目卡片（item 视图程序化构建，减少资源文件）。 */
 private class PlaylistAdapter(
-    private val onEntryClick: (com.mytvb.feature.marmot.domain.MarmotModels.Vod) -> Unit
+    private val onEntryClick: (Vod) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private sealed interface Row {
-        data class SectionRow(val live: com.mytvb.feature.marmot.domain.MarmotModels.Live) : Row
-        data class EntryRow(val vod: com.mytvb.feature.marmot.domain.MarmotModels.Vod) : Row
+        data class SectionRow(val live: Live) : Row
+        data class EntryRow(val vod: Vod) : Row
     }
 
     private var rows: List<Row> = emptyList()
 
-    fun submit(lives: List<com.mytvb.feature.marmot.domain.MarmotModels.Live>) {
+    fun submit(lives: List<Live>) {
         rows = lives.flatMap { live ->
             if (live.vods.isEmpty()) {
                 emptyList()
@@ -159,45 +165,71 @@ private class PlaylistAdapter(
         }
     }
 
-    private fun createEntryView(parent: ViewGroup): TextView {
-        return AppCompatTextView(parent.context).apply {
+    /** 图文卡片：封面（16:9 区域）+ 单行标题，焦点高亮复用 tab_round_background 选择器。 */
+    private fun createEntryView(parent: ViewGroup): View {
+        val context = parent.context
+        val container = LinearLayout(context).apply {
+            orientation = LinearLayout.VERTICAL
             layoutParams = RecyclerView.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
-                dp(context, 64)
+                ViewGroup.LayoutParams.WRAP_CONTENT
             ).apply {
                 setMargins(dp(context, 4), dp(context, 4), dp(context, 4), dp(context, 4))
             }
-            textSizeSp(18f)
+            isFocusable = true
+            isClickable = true
+            background = ContextCompat.getDrawable(context, R.drawable.tab_round_background)
+            setPadding(dp(context, 6), dp(context, 6), dp(context, 6), dp(context, 6))
+        }
+        val cover = AppCompatImageView(context).apply {
+            id = android.R.id.icon
+            layoutParams = LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                dp(context, 92)
+            )
+            scaleType = android.widget.ImageView.ScaleType.CENTER_CROP
+            // 常驻占位底：pic 缺失时直接露出；有图时先露出（加载中状态）后被封面覆盖
+            setBackgroundResource(R.drawable.playlist_cover_placeholder)
+        }
+        val title = AppCompatTextView(context).apply {
+            id = android.R.id.text1
+            layoutParams = LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            ).apply { topMargin = dp(context, 6) }
+            textSizeSp(16f)
             setTextColor(ContextCompat.getColor(context, android.R.color.white))
             ellipsize = TextUtils.TruncateAt.END
             maxLines = 1
             gravity = Gravity.CENTER
-            isFocusable = true
-            isClickable = true
-            background = ContextCompat.getDrawable(context, R.drawable.tab_round_background)
-            setPadding(dp(context, 8), 0, dp(context, 8), 0)
         }
+        container.addView(cover)
+        container.addView(title)
+        return container
     }
 
     private class SectionHolder(view: TextView) : RecyclerView.ViewHolder(view) {
-        fun bind(live: com.mytvb.feature.marmot.domain.MarmotModels.Live) {
+        fun bind(live: Live) {
             (itemView as TextView).text = live.name.ifBlank { live.tag }
         }
     }
 
-    private class EntryHolder(view: TextView) : RecyclerView.ViewHolder(view) {
-        fun bind(
-            vod: com.mytvb.feature.marmot.domain.MarmotModels.Vod,
-            click: (com.mytvb.feature.marmot.domain.MarmotModels.Vod) -> Unit
-        ) {
-            val textView = itemView as TextView
-            textView.text = vod.name
+    private class EntryHolder(view: View) : RecyclerView.ViewHolder(view) {
+        private val cover: AppCompatImageView = view.findViewById(android.R.id.icon)
+        private val title: TextView = view.findViewById(android.R.id.text1)
+
+        fun bind(vod: Vod, click: (Vod) -> Unit) {
+            title.text = vod.name
+            if (vod.pic.isNotBlank()) {
+                ImageLoader.load(cover, vod.pic)
+            } else {
+                cover.setImageDrawable(null)
+            }
             val playable = vod.url.isNotBlank()
-            textView.isEnabled = playable
-            textView.isFocusable = playable
-            textView.isClickable = playable
-            textView.alpha = if (playable) 1f else 0.45f
-            textView.setOnClickListener { click(vod) }
+            itemView.isFocusable = playable
+            itemView.isClickable = playable
+            itemView.alpha = if (playable) 1f else 0.45f
+            itemView.setOnClickListener { click(vod) }
         }
     }
 

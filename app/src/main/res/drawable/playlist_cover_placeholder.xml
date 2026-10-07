@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 节目卡片封面占位：pic 缺失/加载中时显示的半透明底 -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="#22FFFFFF" />
+</shape>

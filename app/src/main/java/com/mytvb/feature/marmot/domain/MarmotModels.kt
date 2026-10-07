@@ -36,7 +36,9 @@ object MarmotModels {
      */
     data class Vod(
         @SerializedName("name") var name: String = "",
-        @SerializedName("url") var url: String = ""
+        @SerializedName("url") var url: String = "",
+        /** 封面图 URL（节目单 tv.json 可选字段，Marmot 频道表无此字段时为空串）。 */
+        @SerializedName("pic") var pic: String = ""
     ) : Serializable {
         @Transient var tagIndex: Int = 0
         @Transient var detailIndex: Int = 0

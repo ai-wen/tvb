@@ -294,7 +294,7 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>() {
             )),
             SettingGroup(R.string.setting_group_play_behavior, listOf(
                 stored(KEY_RESUME_PLAYBACK, R.string.resume_playback, "开"),
-                stored(KEY_AFTER_PLAY, R.string.after_play, "播推荐视频"),
+                stored(KEY_AFTER_PLAY, R.string.after_play, "播放合集中的下一个"),
                 stored(KEY_PLAY_FINISH_EXIT_PLAYER, R.string.play_finish_exit_player, "开"),
                 stored(KEY_SPONSOR_BLOCK_ENABLED, R.string.sponsor_block, "关")
             ))

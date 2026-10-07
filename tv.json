@@ -4,63 +4,61 @@
       "tag": "chinese",
       "name": "语文",
       "vods": [
-        { "name": "跟着书本去旅行", "url": "https://www.bilibili.com/video/BV1yjYx6AE3Z/" },
-        { "name": "中国通史", "url": "https://www.bilibili.com/video/BV1wQL96AELx/" },
-        { "name": "宗师列传・唐宋八大家", "url": "https://www.bilibili.com/video/BV1kt1YBGEkm/" },
-        { "name": "定风波", "url": "https://www.bilibili.com/video/BV1uw411T7SC/" },
-        { "name": "唐之韵", "url": "https://www.bilibili.com/video/BV1ft411979g/" }
+        { "name": "跟着书本去旅行", "url": "https://www.bilibili.com/video/BV1yjYx6AE3Z/", "pic": "http://i1.hdslb.com/bfs/archive/253def74f0f1ff55b99674c80e457c9f6fd15725.png" },
+        { "name": "中国通史", "url": "https://www.bilibili.com/video/BV1wQL96AELx/", "pic": "http://i2.hdslb.com/bfs/archive/50f3fb4cea4ab3cf6f56d3ff7b64f715fc27060f.jpg" },
+        { "name": "宗师列传・唐宋八大家", "url": "https://www.bilibili.com/video/BV1kt1YBGEkm/", "pic": "http://i0.hdslb.com/bfs/archive/31b1fb74a4645d48a65154875ef5042f130a719a.jpg" },
+        { "name": "定风波", "url": "https://www.bilibili.com/video/BV1uw411T7SC/", "pic": "http://i2.hdslb.com/bfs/archive/211ddbdabf147340ba636979bdf22b22f7c39532.jpg" },
+        { "name": "唐之韵", "url": "https://www.bilibili.com/video/BV1ft411979g/", "pic": "http://i0.hdslb.com/bfs/archive/e9c6da0de63b5cdf269422944c48ada1021bf548.png" }
       ]
     },
     {
       "tag": "math",
       "name": "数学",
       "vods": [
-        { "name": "像乌鸦一样思考", "url": "https://www.bilibili.com/video/BV1tXsoecExv/" },
-        { "name": "神奇的数字", "url": "https://www.bilibili.com/video/BV1p34y1Y77b/" }
+        { "name": "像乌鸦一样思考", "url": "https://www.bilibili.com/video/BV1tXsoecExv/", "pic": "http://i1.hdslb.com/bfs/archive/bf3262cc1344fd8a483db11e2c8bb2daaa4c88ac.png" },
+        { "name": "神奇的数字", "url": "https://www.bilibili.com/video/BV1p34y1Y77b/", "pic": "http://i1.hdslb.com/bfs/archive/5c716696eddea106fe02bcdaa111a420e12f99a5.jpg" }
       ]
     },
     {
       "tag": "physics",
       "name": "物理",
       "vods": [
-        { "name": "我的牛顿教练", "url": "" },
-        { "name": "宇宙时空之旅", "url": "" },
-        { "name": "科学大实验", "url": "" }
+        { "name": "我的牛顿教练", "url": "https://www.bilibili.com/video/BV1Hx421U7V5", "pic": "http://i0.hdslb.com/bfs/archive/a9d19433d1a7160c59a863f62649f6de4136e1af.png" },
+        { "name": "宇宙时空之旅", "url": "https://www.bilibili.com/video/BV1ie4y1A7MH/", "pic": "http://i0.hdslb.com/bfs/archive/ebb81df085bee68490495a7be44e9e71e14b5714.png" },
+        { "name": "科学大实验", "url": "https://www.bilibili.com/video/BV1AU4y1p7o5/", "pic": "http://i2.hdslb.com/bfs/archive/704583cb94490e12a021daa01a989d6d8326056c.png" }
       ]
     },
     {
       "tag": "chemistry",
       "name": "化学",
       "vods": [
-        { "name": "美丽化学", "url": "" },
-        { "name": "我们需要化学", "url": "" },
-        { "name": "门捷列夫很忙", "url": "" }
+        { "name": "美丽化学", "url": "https://www.bilibili.com/video/BV1KE411872v/", "pic": "http://i0.hdslb.com/bfs/archive/40060c4cc22249042ac53a7ff6b24c19663a79d8.jpg" },
+        { "name": "我们需要化学", "url": "https://www.bilibili.com/video/BV1N54y1S7Dr/", "pic": "http://i1.hdslb.com/bfs/archive/fdcf5717caa14cfd7be92f5b98ed56b860e6d160.jpg" },
+        { "name": "门捷列夫很忙", "url": "https://www.bilibili.com/video/BV1Tu4y1Q7Yd/", "pic": "http://i0.hdslb.com/bfs/archive/0a895755970813f2279917f0a417a20a82e78da3.jpg" }
       ]
     },
     {
       "tag": "politics",
       "name": "政治",
       "vods": [
-        { "name": "辉煌中国", "url": "" },
-        { "name": "大国外交", "url": "" }
+        { "name": "辉煌中国", "url": "https://www.bilibili.com/video/BV1bx411x7Ut/", "pic": "http://i2.hdslb.com/bfs/archive/84c2d86819552c29d06aed19f174116789087ba7.jpg" },
       ]
     },
     {
       "tag": "geography",
       "name": "地理",
       "vods": [
-        { "name": "地球脉动", "url": "" },
-        { "name": "航拍中国", "url": "" },
-        { "name": "蓝色星球", "url": "" }
+        { "name": "地球脉动", "url": "https://www.bilibili.com/video/BV1Qp4y1S7Qp/", "pic": "http://i0.hdslb.com/bfs/archive/049ab574e0a223d17b9d704d0d7d99e3e9241f09.jpg" },
+        { "name": "航拍中国", "url": "https://www.bilibili.com/video/BV15K4y1x7da", "pic": "http://i0.hdslb.com/bfs/archive/229bf957c248d535f68a60fb9d902bbbbc1539bb.jpg" },
+        { "name": "蓝色星球", "url": "https://www.bilibili.com/video/BV1x8411G7Ni/", "pic": "http://i0.hdslb.com/bfs/archive/4aa9d0e909cbd3c4da57fffa6ef5e45049b7147c.jpg" }
       ]
     },
     {
       "tag": "biology",
       "name": "生物",
       "vods": [
-        { "name": "生命的故事", "url": "" },
-        { "name": "种出个地球", "url": "" },
-        { "name": "工作细胞", "url": "" }
+        { "name": "生命的故事", "url": "https://www.bilibili.com/video/BV1Wa411T7Ly/", "pic": "http://i1.hdslb.com/bfs/archive/cbade8fd4340c1b9e37bafcda2f2928f1537c1d3.jpg" },
+        { "name": "种出个地球", "url": "https://www.bilibili.com/video/BV16vY86iE4X/", "pic": "http://i2.hdslb.com/bfs/archive/704db28c866fd844a7188081c1267f7558bb5e53.jpg" },
       ]
     }
   ]

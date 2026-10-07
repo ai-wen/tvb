@@ -25,7 +25,7 @@ data class PlayerSettings(
     val defaultAudioQualityId: Int? = VideoQualityDefaults.DEFAULT_AUDIO_QUALITY_ID,
     val defaultPlaybackSpeed: Float = 1.0f,
     val defaultVideoCodec: VideoCodecEnum? = VideoCodecEnum.HEVC,
-    val afterPlayMode: AfterPlayMode = AfterPlayMode.RECOMMEND,
+    val afterPlayMode: AfterPlayMode = AfterPlayMode.NEXT_EPISODE,
     val exitPlayerWhenPlaybackFinished: Boolean = true,
     val subtitleDefaultMode: SubtitleDefaultMode = SubtitleDefaultMode.AUTO,
     // 用户手动选择过的字幕语言（轨道 lan，如 ai-zh / zh-CN / en-US），自动选择时最优先匹配；空 = 从未手动选过。
@@ -165,8 +165,9 @@ object PlayerSettingsStore {
                 "播推荐视频" -> AfterPlayMode.RECOMMEND
                 "播列表中的下一个" -> AfterPlayMode.PLAY_QUEUE
                 "播放合集中的下一个" -> AfterPlayMode.NEXT_EPISODE
-                null, "" -> AfterPlayMode.RECOMMEND
-                else -> AfterPlayMode.RECOMMEND
+                // 定制版默认：合集内自动连播，播完退出（不自动播推荐内容）
+                null, "" -> AfterPlayMode.NEXT_EPISODE
+                else -> AfterPlayMode.NEXT_EPISODE
             },
             exitPlayerWhenPlaybackFinished = parseToggle(
                 readSetting(KEY_PLAY_FINISH_EXIT_PLAYER),
