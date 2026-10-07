@@ -250,6 +250,7 @@
                     android:contentDescription="@string/choose_episode"/>
                 <com.mytvb.feature.player.view.PlayerControlButton
                     android:id="@+id/button_more"
+                    android:visibility="gone"
                     android:background="@drawable/cell_background"
                     android:padding="@dimen/px23"
                     android:focusable="true"
@@ -284,6 +285,7 @@
                     android:contentDescription="@string/subtitle"/>
                 <com.mytvb.feature.player.view.PlayerControlButton
                     android:id="@+id/button_related"
+                    android:visibility="gone"
                     android:background="@drawable/cell_background"
                     android:padding="@dimen/px23"
                     android:focusable="true"

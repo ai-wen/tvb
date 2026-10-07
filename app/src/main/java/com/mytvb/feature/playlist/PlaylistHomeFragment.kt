@@ -106,6 +106,13 @@ class PlaylistHomeFragment : Fragment(), MainTabFocusTarget {
     }
 }
 
+/** 正方形封面视图：宽度撑满单元格，高度取实测宽度（16:9 封面 CENTER_CROP 居中裁切，不变形）。 */
+private class SquareImageView(context: android.content.Context) : AppCompatImageView(context) {
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        super.onMeasure(widthMeasureSpec, widthMeasureSpec)
+    }
+}
+
 /** 节目单列表适配器：分组标题 + 图文节目卡片（item 视图程序化构建，减少资源文件）。 */
 private class PlaylistAdapter(
     private val onEntryClick: (Vod) -> Unit
@@ -181,11 +188,11 @@ private class PlaylistAdapter(
             background = ContextCompat.getDrawable(context, R.drawable.tab_round_background)
             setPadding(dp(context, 6), dp(context, 6), dp(context, 6), dp(context, 6))
         }
-        val cover = AppCompatImageView(context).apply {
+        val cover = SquareImageView(context).apply {
             id = android.R.id.icon
             layoutParams = LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
-                dp(context, 92)
+                ViewGroup.LayoutParams.WRAP_CONTENT
             )
             scaleType = android.widget.ImageView.ScaleType.CENTER_CROP
             // 常驻占位底：pic 缺失时直接露出；有图时先露出（加载中状态）后被封面覆盖

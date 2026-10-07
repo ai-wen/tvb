@@ -301,13 +301,16 @@ class MarmotLiveActivity : BaseActivity<ActivityMarmotLiveBinding>() {
                 Toast.makeText(this@MarmotLiveActivity, R.string.activity_no_cctv_channels, Toast.LENGTH_SHORT).show()
                 return@launch
             }
-            // 3. 恢复上次观看频道：优先按保存的 URL 反查（必须是 CCTV 频道），否则回退首个 CCTV 频道
+            // 3. 恢复上次观看频道：优先按保存的 URL 反查（必须是 CCTV 频道）；
+            //    无历史记录（首次进入）时默认 CCTV-6 电影频道（定制版），仍无则回退首个频道
+            val allCctvVods = provinces.flatMap { it.vods }
+            val defaultVod = allCctvVods.firstOrNull { extractCctvChannelId(it.url) == "cctv6" }
+                ?: provinces.first().vods.first()
             val lastUrl = appSettings.getCachedString(KEY_LAST_CHANNEL_URL, null)
             currentVod = if (!lastUrl.isNullOrEmpty() && extractCctvChannelId(lastUrl) != null) {
-                provinces.flatMap { it.vods }.firstOrNull { it.url == lastUrl }
-                    ?: provinces.first().vods.first()
+                allCctvVods.firstOrNull { it.url == lastUrl } ?: defaultVod
             } else {
-                provinces.first().vods.first()
+                defaultVod
             }
             if (currentVod == null) {
                 Toast.makeText(this@MarmotLiveActivity, R.string.activity_no_channels, Toast.LENGTH_SHORT).show()
