@@ -1,31 +1,67 @@
 {
-
-"《跟着书本去旅行》":"https://www.bilibili.com/video/BV1yjYx6AE3Z/",
-"《中国通史》":"https://www.bilibili.com/video/BV1wQL96AELx/",
-"《宗师列传・唐宋八大家》":"https://www.bilibili.com/video/BV1kt1YBGEkm",
-"《定风波》":"https://www.bilibili.com/video/BV1uw411T7SC/",
-"《唐之韵》":"https://www.bilibili.com/video/BV1ft411979g/",
-
-"《像乌鸦一样思考》":"https://www.bilibili.com/video/BV1tXsoecExv/",
-"《神奇的数字》":"https://www.bilibili.com/video/BV1p34y1Y77b/",
-
-"《我的牛顿教练》":"6 集，每集 25 分钟",
-"《宇宙时空之旅》":"13 集，每集 45 分钟",
-"《科学大实验》":"40 集，每集 10 分钟",
-
-"《美丽化学》":"24 集，每集 2 - 3 分钟",
-"《我们需要化学》":"6 集，每集 15 分钟",
-"《门捷列夫很忙》":"5 集，每集 25 分钟",
-
-
-"《辉煌中国》":"6 集，每集 50 分钟",
-"《大国外交》":"6 集，每集 45 分钟",
-
-"《地球脉动》":"3 季共 25 集，每集 60 分钟",
-"《航拍中国》":"4 季共 34 集，每集 50 分钟",
-"《蓝色星球》":"2 季共 15 集，每集 60 分钟",
-
-"《生命的故事》":"6 集，每集 60 分钟",
-"《种出个地球》":"3 集，每集 60 分钟",
-"《工作细胞》":"2 季共 22 集，每集 25 分钟",
+  "data": [
+    {
+      "tag": "chinese",
+      "name": "语文",
+      "vods": [
+        { "name": "跟着书本去旅行", "url": "https://www.bilibili.com/video/BV1yjYx6AE3Z/" },
+        { "name": "中国通史", "url": "https://www.bilibili.com/video/BV1wQL96AELx/" },
+        { "name": "宗师列传・唐宋八大家", "url": "https://www.bilibili.com/video/BV1kt1YBGEkm/" },
+        { "name": "定风波", "url": "https://www.bilibili.com/video/BV1uw411T7SC/" },
+        { "name": "唐之韵", "url": "https://www.bilibili.com/video/BV1ft411979g/" }
+      ]
+    },
+    {
+      "tag": "math",
+      "name": "数学",
+      "vods": [
+        { "name": "像乌鸦一样思考", "url": "https://www.bilibili.com/video/BV1tXsoecExv/" },
+        { "name": "神奇的数字", "url": "https://www.bilibili.com/video/BV1p34y1Y77b/" }
+      ]
+    },
+    {
+      "tag": "physics",
+      "name": "物理",
+      "vods": [
+        { "name": "我的牛顿教练", "url": "" },
+        { "name": "宇宙时空之旅", "url": "" },
+        { "name": "科学大实验", "url": "" }
+      ]
+    },
+    {
+      "tag": "chemistry",
+      "name": "化学",
+      "vods": [
+        { "name": "美丽化学", "url": "" },
+        { "name": "我们需要化学", "url": "" },
+        { "name": "门捷列夫很忙", "url": "" }
+      ]
+    },
+    {
+      "tag": "politics",
+      "name": "政治",
+      "vods": [
+        { "name": "辉煌中国", "url": "" },
+        { "name": "大国外交", "url": "" }
+      ]
+    },
+    {
+      "tag": "geography",
+      "name": "地理",
+      "vods": [
+        { "name": "地球脉动", "url": "" },
+        { "name": "航拍中国", "url": "" },
+        { "name": "蓝色星球", "url": "" }
+      ]
+    },
+    {
+      "tag": "biology",
+      "name": "生物",
+      "vods": [
+        { "name": "生命的故事", "url": "" },
+        { "name": "种出个地球", "url": "" },
+        { "name": "工作细胞", "url": "" }
+      ]
+    }
+  ]
 }
