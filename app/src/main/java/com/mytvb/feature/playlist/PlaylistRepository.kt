@@ -1,9 +1,7 @@
 package com.mytvb.feature.playlist
 
 import android.content.Context
-import com.google.gson.reflect.TypeToken
 import com.google.gson.JsonParser
-import com.mytvb.core.common.json.GsonHolder
 import com.mytvb.core.common.log.AppLog
 import com.mytvb.feature.marmot.domain.MarmotModels.Live
 import com.mytvb.feature.marmot.domain.MarmotModels.Vod
@@ -143,12 +141,40 @@ object PlaylistRepository {
     /** 解析节目单 JSON：优先标准结构，回退宽松扁平结构。返回空列表表示不可用。 */
     private fun parse(json: String?): List<Live> {
         if (json.isNullOrBlank()) return emptyList()
-        // 1) 标准结构 {data:[{tag,name,vods:[{name,url}]}]}
+        // 1) 标准结构 {data:[{tag,name,vods:[{name,url,pic}]}]}。
+        //    走 JsonElement 树遍历而非直接 Gson 绑定：手工维护的 JSON 常见尾逗号
+        //    （"[{...},]"）会被 Gson 宽松解析成 null 数组元素，直接绑定得到 vods=[obj,null]，
+        //    下游 Kotlin 非空检查即崩（NPE at EntryRow <init>）。树遍历逐元素判空丢弃，
+        //    对尾逗号/缺字段/错类型天然免疫。
         runCatching {
-            val type = object : TypeToken<com.mytvb.feature.marmot.domain.MarmotModels.DataWrapper<Live>>() {}.type
-            GsonHolder.DEFAULT
-                .fromJson<com.mytvb.feature.marmot.domain.MarmotModels.DataWrapper<Live>>(json, type)
-                .data
+            val root = JsonParser.parseString(json).asJsonObject
+            root.getAsJsonArray("data")?.mapNotNull { groupElement ->
+                val group = groupElement?.takeIf { it.isJsonObject }?.asJsonObject ?: return@mapNotNull null
+                val vods = group.getAsJsonArray("vods")
+                    ?.mapNotNull { vodElement ->
+                        val vodObject = vodElement?.takeIf { it.isJsonObject }?.asJsonObject ?: return@mapNotNull null
+                        // 严格校验：无名条目直接丢弃（防止空白卡片）
+                        val name = vodObject.primitiveString("name")
+                        if (name.isBlank()) return@mapNotNull null
+                        Vod(
+                            name = name,
+                            url = vodObject.primitiveString("url"),
+                            pic = vodObject.primitiveString("pic")
+                        )
+                    }
+                    ?.toMutableList()
+                    ?: mutableListOf()
+                if (vods.isEmpty()) {
+                    null
+                } else {
+                    Live(
+                        tag = group.primitiveString("tag"),
+                        // 分组显示名缺失时回退 tag，保证标题非空
+                        name = group.primitiveString("name").ifBlank { group.primitiveString("tag") },
+                        vods = vods
+                    )
+                }
+            }
         }.getOrNull()
             ?.takeIf { it.isNotEmpty() }
             ?.let { return it }
@@ -165,5 +191,10 @@ object PlaylistRepository {
                 listOf(Live(tag = "playlist", name = "节目单", vods = vods.toMutableList()))
             }
         }.getOrDefault(emptyList())
+    }
+
+    /** JsonObject 里取原始字符串值：非原始类型/缺失/null 一律回退空串。 */
+    private fun com.google.gson.JsonObject.primitiveString(key: String): String {
+        return get(key)?.takeIf { it.isJsonPrimitive }?.asString.orEmpty()
     }
 }

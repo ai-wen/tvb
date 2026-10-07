@@ -78,6 +78,8 @@ class MyBLBLApplication : Application() {
         AppLog.init(this)
         // Toast 等使用 Application 级 Resources 的场景与 Activity 同倍率
         com.mytvb.core.ui.base.UiScale.apply(resources)
+        // 临时调试：崩溃时用 Toast 显示崩溃位置，并写完整堆栈到 filesDir/crash_log.txt
+        installCrashToastHandler()
         AppLog.i(TAG, "STARTUP T0 app.onCreate start")
         AppLog.i(TAG, "STARTUP T1 app.onCreate end minimal elapsed=${SystemClock.elapsedRealtime() - startMs}ms")
     }
@@ -253,6 +255,46 @@ class MyBLBLApplication : Application() {
                 AppLog.i(TAG, "STARTUP sessionPrewarm skip loggedOut")
                 startupPrewarmScheduled.set(false)
             }
+        }
+    }
+
+    /**
+     * 临时调试（定位启动崩溃后移除）：
+     * 捕获未处理异常 → Toast 显示崩溃类名+代码位置，完整堆栈写入 filesDir/crash_log.txt。
+     * 崩溃线程可能是主线程（Looper 已死），故用独立 Looper 线程显示 Toast。
+     */
+    private fun installCrashToastHandler() {
+        val previousHandler = Thread.getDefaultUncaughtExceptionHandler()
+        Thread.setDefaultUncaughtExceptionHandler { thread, throwable ->
+            // 1. 完整堆栈落盘，供 adb pull 或后续分析
+            runCatching {
+                java.io.File(filesDir, "crash_log.txt").writeText(
+                    buildString {
+                        append("time=").append(System.currentTimeMillis()).append('\n')
+                        append("thread=").append(thread.name).append('\n')
+                        append(android.util.Log.getStackTraceString(throwable))
+                    }
+                )
+            }
+            // 2. 独立 Looper 线程弹 Toast（主线程崩溃时其 Looper 已停止，直接 post 无效）
+            runCatching {
+                Thread {
+                    android.os.Looper.prepare()
+                    val frames = throwable.stackTrace.take(4).joinToString("\n") {
+                        "${it.fileName}:${it.lineNumber} ${it.methodName}"
+                    }
+                    android.widget.Toast.makeText(
+                        this@MyBLBLApplication,
+                        "CRASH ${throwable.javaClass.simpleName}\n$frames",
+                        android.widget.Toast.LENGTH_LONG
+                    ).show()
+                    android.os.Looper.loop()
+                }.start()
+                // 给 Toast 显示留时间（LENGTH_LONG ≈ 3.5s）
+                Thread.sleep(6000)
+            }
+            // 3. 交回系统默认处理（杀进程）
+            previousHandler?.uncaughtException(thread, throwable)
         }
     }
 

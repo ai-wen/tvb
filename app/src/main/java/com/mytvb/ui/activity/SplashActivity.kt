@@ -15,7 +15,6 @@ import android.widget.ImageView
 import com.mytvb.R
 import com.mytvb.core.common.log.AppLog
 import com.mytvb.core.ui.base.UiScale
-import com.mytvb.ui.activity.MarmotLiveActivity
 
 class SplashActivity : Activity() {
 
@@ -88,8 +87,6 @@ class SplashActivity : Activity() {
                 Intent(this, MainActivity::class.java)
                     .addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
             )
-            // 启动直达 CCTV 直播页（返回键回到节目单主界面）
-            MarmotLiveActivity.start(this)
             finish()
             suppressTransitionAnimation()
         }

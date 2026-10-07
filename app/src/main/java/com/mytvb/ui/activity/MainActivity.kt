@@ -110,6 +110,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), TabBarView.OnTabClickL
     private var lastBackStackEntryCount = 0
     private var pendingFocusRestoreDelayMs = 0L
     private var startupTasksScheduled = false
+    private var startupLiveJumped = false
     private var startupShellRevealed = false
     private var startupInitialContentAttached = false
     private var homeContentReadyLogged = false
@@ -287,6 +288,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), TabBarView.OnTabClickL
             attachInitialMainTabAfterShellDraw()
         }
         scheduleDeferredStartupTasks()
+        // 启动直达 CCTV 直播页（返回键回到节目单主界面）。
+        // 必须放在这里：Main.onCreate 的 ensureSessionRuntimeReady 已初始化 Koin，
+        // 此时 MarmotLiveActivity.start → TeenModeTimer → appSettings 才安全（冷启动顺序）。
+        if (!restoredFromSavedState && !startupLiveJumped) {
+            startupLiveJumped = true
+            MarmotLiveActivity.start(this)
+        }
         // 定制版：首次启动不弹使用提示（不再有青少年模式相关提示与 10s 倒计时确认）
         // showUsageTipIfNeeded()
         AppLog.i(
